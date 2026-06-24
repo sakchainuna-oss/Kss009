@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฟอร์ม นว./กสศ.01</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1a5276;
+    --accent: #2e86c1;
+    --light: #eaf4fb;
+    --border: #aed6f1;
+    --success: #1e8449;
+    --warn: #b7950b;
+    --bg: #f4f8fc;
+    --white: #ffffff;
+    --text: #1c2833;
+    --muted: #5d6d7e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  header .logo {
+    width: 40px; height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--primary); font-size: 14px;
+  }
+
+  header h1 { font-size: 16px; font-weight: 600; line-height: 1.3; }
+  header p { font-size: 12px; opacity: 0.8; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* Student list */
+  .student-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+
+  .student-bar h2 { font-size: 14px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+
+  .student-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+  .chip {
+    background: var(--light);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .chip:hover, .chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .chip.delete-chip { color: #c0392b; border-color: #f1948a; background: #fdf2f0; }
+  .chip.delete-chip:hover { background: #c0392b; color: white; border-color: #c0392b; }
+
+  .btn-add-student {
+    background: var(--success);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 600;
+  }
+  .btn-add-student:hover { opacity: 0.9; }
+
+  /* Form */
+  .form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--light);
+  }
+
+  .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .field { flex: 1; min-width: 140px; }
+  .field.full { flex: 100%; }
+  .field.half { flex: calc(50% - 6px); min-width: 130px; }
+
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+  label span.req { color: #e74c3c; }
+
+  input[type=text], input[type=number], input[type=tel], select, textarea {
+    width: 100%;
+    border: 1.5px solid #dce5ef;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: 'Sarabun', sans-serif;
+    background: white;
+    color: var(--text);
+    transition: border-color 0.15s;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(46,134,193,0.12);
+  }
+
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+  .checkbox-item input { width: auto; accent-color: var(--accent); }
+
+  /* Family table */
+  .family-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+  }
+
+  .btn-sm {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 600;
+  }
+  .btn-sm.danger { background: #c0392b; }
+  .btn-sm:hover { opacity: 0.9; }
+
+  .family-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .family-table th {
+    background: var(--light);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 8px 6px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .family-table td {
+    padding: 4px 4px;
+    border: 1px solid #e8edf2;
+    vertical-align: middle;
+  }
+  .family-table td input, .family-table td select {
+    border: none;
+    border-radius: 4px;
+    padding: 5px 6px;
+    font-size: 12px;
+    background: #f8fafc;
+    width: 100%;
+  }
+  .family-table td input:focus, .family-table td select:focus {
+    background: white;
+    outline: 1px solid var(--accent);
+  }
+
+  /* Action buttons */
+  .action-bar {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 12px rgba(26,82,118,0.3);
+    transition: all 0.15s;
+  }
+  .btn-primary:hover { background: #154360; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 600;
+  }
+  .btn-secondary:hover { background: var(--light); }
+
+  /* Print area */
+  #print-area { display: none; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1e8449; color: white;
+    padding: 12px 24px; border-radius: 24px;
+    font-size: 14px; font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 999;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  /* Empty state */
+  .empty-form {
+    text-align: center; padding: 40px 20px; color: var(--muted);
+  }
+  .empty-form .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-form p { font-size: 15px; }
+
+  @media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; display: block !important; }
+    #print-area { position: absolute; top: 0; left: 0; width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .field { min-width: 100%; }
+    .field.half { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">กสศ</div>
+  <div>
+    <h1>แบบ นว./กสศ.01</h1>
+    <p>แบบขอรับเงินอุดหนุนนักเรียนยากจน</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Student list -->
+  <div class="student-bar">
+    <h2>นักเรียนที่บันทึกไว้</h2>
+    <div class="student-chips" id="studentChips"></div>
+    <button class="btn-add-student" onclick="newStudent()">+ เพิ่มนักเรียนใหม่</button>
+  </div>
+
+  <!-- Form -->
+  <div id="formArea">
+    <div class="empty-form">
+      <div class="icon">📋</div>
+      <p>กด "เพิ่มนักเรียนใหม่" หรือเลือกนักเรียนที่บันทึกไว้</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Print area -->
+<div id="print-area"></div>
+
+<script>
+const STORE_KEY = 'kss01_students';
+
+// Load data
+let students = [];
+try {
+  students = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+} catch(e) { students = []; }
+
+let currentIndex = -1;
+
+function save() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(students));
+}
+
+function showToast(msg, color='#1e8449') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function renderChips() {
+  const container = document.getElementById('studentChips');
+  if (students.length === 0) {
+    container.innerHTML = '<span style="color:#aaa;font-size:13px;">ยังไม่มีข้อมูล</span>';
+    return;
+  }
+  container.innerHTML = students.map((s,i) =>
+    `<span class="chip ${i===currentIndex?'active':''}" onclick="loadStudent(${i})">
+      ${s.studentName || 'ไม่มีชื่อ'}
+    </span>`
+  ).join('');
+}
+
+function newStudent() {
+  const blank = {
+    schoolName:'', schoolYear:'2569', semester:'1', district:'สพม.อดค.1',
+    studentName:'', studentSurname:'', grade:'ป.2',
+    nationalId:'', statusFamily:'พ่อแม่ร้าง',
+    guardianName:'', guardianSurname:'', guardianRelation:'พ่อ/แม่',
+    guardianOccupation:'', guardianPhone:'', guardianNationalId:'',
+    welfare: { welfare1:false, welfare2:false },
+    familyCount:'',
+    familyMembers: []
+  };
+  students.push(blank);
+  currentIndex = students.length - 1;
+  save();
+  renderChips();
+  renderForm();
+}
+
+function loadStudent(i) {
+  currentIndex = i;
+  renderChips();
+  renderForm();
+}
+
+function deleteStudent() {
+  if (currentIndex < 0) return;
+  if (!confirm(`ลบข้อมูล "${students[currentIndex].studentName}" ออกหรือไม่?`)) return;
+  students.splice(currentIndex, 1);
+  currentIndex = students.length > 0 ? 0 : -1;
+  save();
+  renderChips();
+  if (currentIndex >= 0) renderForm();
+  else document.getElementById('formArea').innerHTML = `<div class="empty-form"><div class="icon">📋</div><p>กด "เพิ่มนักเรียนใหม่" เพื่อเริ่มต้น</p></div>`;
+  showToast('ลบข้อมูลแล้ว', '#c0392b');
+}
+
+function fieldVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+function checkVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function collectForm() {
+  const s = students[currentIndex];
+  s.schoolName = fieldVal('f_schoolName');
+  s.schoolYear = fieldVal('f_schoolYear');
+  s.semester = fieldVal('f_semester');
+  s.district = fieldVal('f_district');
+  s.studentName = fieldVal('f_studentName');
+  s.studentSurname = fieldVal('f_studentSurname');
+  s.grade = fieldVal('f_grade');
+  s.nationalId = fieldVal('f_nationalId');
+  s.statusFamily = fieldVal('f_statusFamily');
+  s.guardianName = fieldVal('f_guardianName');
+  s.guardianSurname = fieldVal('f_guardianSurname');
+  s.guardianRelation = fieldVal('f_guardianRelation');
+  s.guardianOccupation = fieldVal('f_guardianOccupation');
+  s.guardianPhone = fieldVal('f_guardianPhone');
+  s.guardianNationalId = fieldVal('f_guardianNationalId');
+  s.welfare = {
+    welfare1: checkVal('f_welfare1'),
+    welfare2: checkVal('f_welfare2')
+  };
+  s.familyCount = fieldVal('f_familyCount');
+
+  // family members
+  s.familyMembers = [];
+  const rows = document.querySelectorAll('.fm-row');
+  rows.forEach((row, i) => {
+    s.familyMembers.push({
+      name: row.querySelector('.fm-name')?.value || '',
+      relation: row.querySelector('.fm-relation')?.value || '',
+      nationalId: row.querySelector('.fm-nid')?.value || '',
+      edu: row.querySelector('.fm-edu')?.value || '',
+      age: row.querySelector('.fm-age')?.value || '',
+      income1: row.querySelector('.fm-i1')?.value || '',
+      income2: row.querySelector('.fm-i2')?.value || '',
+      income3: row.querySelector('.fm-i3')?.value || '',
+      income4: row.querySelector('.fm-i4')?.value || '',
+      income5: row.querySelector('.fm-i5')?.value || '',
+      income6: row.querySelector('.fm-i6')?.value || '',
+      income7: row.querySelector('.fm-i7')?.value || '',
+      incomeTotal: row.querySelector('.fm-total')?.value || '',
+    });
+  });
+}
+
+function autoSave() {
+  if (currentIndex < 0) return;
+  collectForm();
+  save();
+  renderChips();
+}
+
+function addFamilyRow(member={}) {
+  const tbody = document.getElementById('familyTbody');
+  const tr = document.createElement('tr');
+  tr.className = 'fm-row';
+  tr.innerHTML = `
+    <td><input class="fm-name" value="${member.name||''}" placeholder="ชื่อ-สกุล"/></td>
+    <td><select class="fm-relation">
+      ${['ตนเอง','บิดา','มารดา','พี่/น้อง','ปู่/ย่า/ตา/ยาย','อื่นๆ'].map(r=>`<option ${member.relation===r?'selected':''}>${r}</option>`).join('')}
+    </select></td>
+    <td><input class="fm-nid" value="${member.nationalId||''}" placeholder="เลขบัตร 13 หลัก"/></td>
+    <td><select class="fm-edu">
+      ${['ป.1-ป.6','ม.1-ม.3','ม.4-ม.6','ปวช.','ปวส./อนุปริญญา','ปริญญาตรี','สูงกว่า','ไม่ได้เรียน'].map(e=>`<option ${member.edu===e?'selected':''}>${e}</option>`).join('')}
+    </select></td>
+    <td><input class="fm-age" type="number" value="${member.age||''}" style="width:50px"/></td>
+    <td><input class="fm-i1" type="number" value="${member.income1||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i2" type="number" value="${member.income2||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i3" type="number" value="${member.income3||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i4" type="number" value="${member.income4||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i5" type="number" value="${member.income5||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i6" type="number" value="${member.income6||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-i7" type="number" value="${member.income7||''}" oninput="calcTotal(this)"/></td>
+    <td><input class="fm-total" type="number" value="${member.incomeTotal||''}" style="background:#fffde7"/></td>
+    <td><button class="btn-sm danger" onclick="this.closest('tr').remove();autoSave()">ลบ</button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function calcTotal(el) {
+  const row = el.closest('tr');
+  const vals = ['fm-i1','fm-i2','fm-i3','fm-i4','fm-i5','fm-i6','fm-i7'].map(c=>parseFloat(row.querySelector('.'+c)?.value||0)||0);
+  const total = vals.reduce((a,b)=>a+b,0);
+  row.querySelector('.fm-total').value = total || '';
+}
+
+function renderForm() {
+  const s = students[currentIndex];
+  document.getElementById('formArea').innerHTML = `
+    <!-- School info -->
+    <div class="form-card">
+      <div class="section-title">ข้อมูลโรงเรียน</div>
+      <div class="field-row">
+        <div class="field">
+          <label>ชื่อโรงเรียน</label>
+          <input id="f_schoolName" type="text" value="${s.schoolName}" oninput="autoSave()" placeholder="เช่น วิเชียรวิทยา"/>
+        </div>
+        <div class="field half">
+          <label>ปีการศึกษา</label>
+          <input id="f_schoolYear" type="text" value="${s.schoolYear}" oninput="autoSave()" placeholder="2569"/>
+        </div>
+        <div class="field half">
+          <label>ภาคเรียน</label>
+          <select id="f_semester" onchange="autoSave()">
+            <option ${s.semester==='1'?'selected':''}>1</option>
+            <option ${s.semester==='2'?'selected':''}>2</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>สังกัด</label>
+          <input id="f_district" type="text" value="${s.district}" oninput="autoSave()"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student info -->
+    <div class="form-card">
+      <div class="section-title">ข้อมูลนักเรียน</div>
+      <div class="field-row">
+        <div class="field">
+          <label>ชื่อ <span class="req">*</span></label>
+          <input id="f_studentName" type="text" value="${s.studentName}" oninput="autoSave()" placeholder="เด็กชาย/หญิง ชื่อ"/>
+        </div>
+        <div class="field">
+          <label>นามสกุล <span class="req">*</span></label>
+          <input id="f_studentSurname" type="text" value="${s.studentSurname}" oninput="autoSave()"/>
+        </div>
+        <div class="field half">
+          <label>ชั้น</label>
+          <select id="f_grade" onchange="autoSave()">
+            ${['ป.1','ป.2','ป.3','ป.4','ป.5','ป.6','ม.1','ม.2','ม.3'].map(g=>`<option ${s.grade===g?'selected':''}>${g}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>เลขประจำตัวประชาชน</label>
+          <input id="f_nationalId" type="text" value="${s.nationalId}" oninput="autoSave()" maxlength="13" placeholder="13 หลัก ไม่มีขีด"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field full">
+          <label>สถานภาพครอบครัว</label>
+          <select id="f_statusFamily" onchange="autoSave()">
+            ${['พ่อแม่อยู่ด้วยกัน','พ่อแม่แยกกันอยู่','พ่อแม่หย่าร้าง','พ่อเสียชีวิต/สาบสูญ','แม่เสียชีวิต/สาบสูญ','เสียชีวิตทั้งคู่/สาบสูญ','พ่อ/แม่แต่งใหม่'].map(v=>`<option ${s.statusFamily===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guardian info -->
+    <div class="form-card">
+      <div class="section-title">ข้อมูลผู้ปกครอง</div>
+      <div class="field-row">
+        <div class="field">
+          <label>ชื่อผู้ปกครอง</label>
+          <input id="f_guardianName" type="text" value="${s.guardianName}" oninput="autoSave()"/>
+        </div>
+        <div class="field">
+          <label>นามสกุล</label>
+          <input id="f_guardianSurname" type="text" value="${s.guardianSurname}" oninput="autoSave()"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field half">
+          <label>ความสัมพันธ์</label>
+          <select id="f_guardianRelation" onchange="autoSave()">
+            ${['พ่อ/แม่','ญาติ','อยู่ลำพัง','ผู้อุปการะ/นายจ้าง','ครัวเรือนสถาบัน'].map(v=>`<option ${s.guardianRelation===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field half">
+          <label>อาชีพ</label>
+          <input id="f_guardianOccupation" type="text" value="${s.guardianOccupation}" oninput="autoSave()" placeholder="เช่น เกษตรกร"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>เบอร์โทรศัพท์</label>
+          <input id="f_guardianPhone" type="tel" value="${s.guardianPhone}" oninput="autoSave()"/>
+        </div>
+        <div class="field">
+          <label>เลขบัตรประชาชนผู้ปกครอง</label>
+          <input id="f_guardianNationalId" type="text" value="${s.guardianNationalId}" oninput="autoSave()" maxlength="13"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welfare -->
+    <div class="form-card">
+      <div class="section-title">สวัสดิการแห่งรัฐ</div>
+      <div class="checkbox-group">
+        <label class="checkbox-item">
+          <input type="checkbox" id="f_welfare1" ${s.welfare?.welfare1?'checked':''} onchange="autoSave()"/>
+          ได้รับสวัสดิการแห่งรัฐ (ทะเบียนคนจน)
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="f_welfare2" ${s.welfare?.welfare2?'checked':''} onchange="autoSave()"/>
+          มีความพิการทางร่างกาย/จิตใจ
+        </label>
+      </div>
+    </div>
+
+    <!-- Family members -->
+    <div class="form-card">
+      <div class="family-header">
+        <div class="section-title" style="border:none;margin:0;padding:0">สมาชิกในครัวเรือน</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label style="font-size:12px;margin:0">จำนวนทั้งหมด</label>
+          <input id="f_familyCount" type="number" value="${s.familyCount||''}" style="width:60px;padding:5px 8px;border:1.5px solid #dce5ef;border-radius:6px;font-size:13px;font-family:Sarabun" oninput="autoSave()"/>
+          <button class="btn-sm" onclick="addFamilyRow();autoSave()">+ เพิ่มสมาชิก</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;margin-top:12px">
+        <table class="family-table">
+          <thead>
+            <tr>
+              <th style="min-width:130px">ชื่อ-สกุล</th>
+              <th>ความสัมพันธ์</th>
+              <th style="min-width:120px">เลขบัตร</th>
+              <th>การศึกษา</th>
+              <th>อายุ</th>
+              <th>มีความพิการ</th>
+              <th>มีโรคเรื้อรัง</th>
+              <th>โครงการเกษตรกร</th>
+              <th>ค่าจ้างเงินเดือน</th>
+              <th>อาชีพ/กรรม (หลังหัก)</th>
+              <th>ธุรกิจ ส่วนตัว</th>
+              <th>บ้าน/เบี้ยสูงอายุ</th>
+              <th>โครงการเกษตรกร 10,000</th>
+              <th>รายได้อื่นๆ</th>
+              <th>รวม</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="familyTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="action-bar">
+      <button class="btn-primary" onclick="generatePrint()">🖨️ พิมพ์/บันทึก PDF</button>
+      <button class="btn-secondary" onclick="deleteStudent()">🗑️ ลบ</button>
+    </div>
+  `;
+
+  // render family rows
+  (s.familyMembers || []).forEach(m => addFamilyRow(m));
+}
+
+function generatePrint() {
+  collectForm();
+  save();
+  const s = students[currentIndex];
+  const fm = s.familyMembers || [];
+
+  const fmRows = fm.map((m,i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${m.name||''}</td>
+      <td>${m.relation||''}</td>
+      <td>${m.nationalId||''}</td>
+      <td>${m.edu||''}</td>
+      <td>${m.age||''}</td>
+      <td style="text-align:center">${m.income1?'✓':''}</td>
+      <td style="text-align:center">${m.income2?'✓':''}</td>
+      <td style="text-align:center">${m.income3?'✓':''}</td>
+      <td>${m.income4||''}</td>
+      <td>${m.income5||''}</td>
+      <td>${m.income6||''}</td>
+      <td>${m.income7||''}</td>
+      <td>${m.incomeTotal||''}</td>
+    </tr>
+  `).join('');
+
+  const html = `
+    <html><head><meta charset="UTF-8">
+    <style>
+      body { font-family: 'Sarabun', 'TH SarabunPSK', sans-serif; font-size: 11pt; margin: 15mm; }
+      h2 { text-align:center; font-size: 14pt; margin-bottom: 4px; }
+      h3 { text-align:center; font-size: 12pt; margin-bottom: 12px; }
+      .row { display:flex; gap:20px; margin-bottom:8px; flex-wrap:wrap; }
+      .lbl { font-weight:600; }
+      .val { border-bottom: 1px dotted #333; min-width:120px; display:inline-block; padding-bottom:1px; }
+      table { width:100%; border-collapse:collapse; font-size:9pt; margin-top:12px; }
+      th { background:#dce5ef; padding:4px 6px; border:1px solid #999; text-align:center; }
+      td { padding:3px 5px; border:1px solid #bbb; }
+      .corner { position:absolute; top:10mm; right:15mm; font-size:9pt; border:1px solid #333; padding:3px 6px; }
+      @page { size: A4; margin: 15mm; }
+    </style>
+    </head><body>
+    <div style="position:relative">
+      <div class="corner">แบบ นว./กสศ.01 หน้า 1</div>
+      <h2>แบบขอรับเงินอุดหนุนนักเรียนยากจน</h2>
+      <h3>ภาคเรียนที่ ${s.semester||'1'} ปีการศึกษา ${s.schoolYear||''}</h3>
+    </div>
+    <div class="row">
+      <span><span class="lbl">โรงเรียน</span> <span class="val">${s.schoolName||''}</span></span>
+      <span><span class="lbl">สังกัด</span> <span class="val">${s.district||''}</span></span>
+    </div>
+    <p style="margin-bottom:8px;font-weight:700">1. ข้อมูลนักเรียน</p>
+    <div class="row">
+      <span><span class="lbl">ชื่อนักเรียน</span> <span class="val">${s.studentName||''}</span></span>
+      <span><span class="lbl">นามสกุล</span> <span class="val">${s.studentSurname||''}</span></span>
+      <span><span class="lbl">ชั้น</span> <span class="val">${s.grade||''}</span></span>
+    </div>
+    <div class="row">
+      <span><span class="lbl">เลขประจำตัวประชาชน</span> <span class="val">${(s.nationalId||'').split('').join(' ')}</span></span>
+    </div>
+    <div class="row">
+      <span><span class="lbl">สถานภาพครอบครัว</span> <span class="val">${s.statusFamily||''}</span></span>
+    </div>
+    <div class="row">
+      <span><span class="lbl">ชื่อผู้ปกครอง</span> <span class="val">${s.guardianName||''}</span></span>
+      <span><span class="lbl">นามสกุล</span> <span class="val">${s.guardianSurname||''}</span></span>
+      <span><span class="lbl">ความสัมพันธ์</span> <span class="val">${s.guardianRelation||''}</span></span>
+    </div>
+    <div class="row">
+      <span><span class="lbl">อาชีพ</span> <span class="val">${s.guardianOccupation||''}</span></span>
+      <span><span class="lbl">โทรศัพท์</span> <span class="val">${s.guardianPhone||''}</span></span>
+    </div>
+    <div class="row">
+      <span><span class="lbl">เลขบัตรผู้ปกครอง</span> <span class="val">${(s.guardianNationalId||'').split('').join(' ')}</span></span>
+    </div>
+    ${s.welfare?.welfare1 ? '<p>☑ ได้รับสวัสดิการแห่งรัฐ (ทะเบียนคนจน)</p>' : ''}
+
+    <p style="margin-top:12px;margin-bottom:4px;font-weight:700">2. จำนวนสมาชิกในครัวเรือน รวม <u>${s.familyCount||''}</u> คน</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>คนที่</th>
+          <th>ชื่อ-สกุล</th>
+          <th>ความสัมพันธ์</th>
+          <th>เลขบัตร</th>
+          <th>การศึกษา</th>
+          <th>อายุ</th>
+          <th>ความพิการ</th>
+          <th>โรคเรื้อรัง</th>
+          <th>โครงการเกษตรกร</th>
+          <th>ค่าจ้าง</th>
+          <th>อาชีพ/กรรม</th>
+          <th>ธุรกิจ</th>
+          <th>เบี้ยสูงอายุ</th>
+          <th>รวม/เดือน</th>
+        </tr>
+      </thead>
+      <tbody>${fmRows}</tbody>
+    </table>
+
+    <p style="margin-top:24px;text-align:right">ลงชื่อ ................................. ครูผู้เยี่ยมบ้าน</p>
+    <p style="text-align:right;margin-top:4px">วันที่ ......./......./........</p>
+    </body></html>
+  `;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
+}
+
+// Init
+renderChips();
+</script>
+</body>
+</html>
